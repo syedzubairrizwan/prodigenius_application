@@ -25,8 +25,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _login() {
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
-      context.read<AuthCubit>().emit(
-        AuthState.error('Email and password are required.'),
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Email and password are required.')),
       );
       return;
     }

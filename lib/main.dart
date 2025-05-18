@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:prodigenius_application/cubit/task_cubit.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prodigenius_application/providers/task_provider.dart';
@@ -9,6 +10,7 @@ import 'package:prodigenius_application/screens/SignupScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:prodigenius_application/cubit/auth_cubit.dart';
 import 'firebase_options.dart';
+
 
 void main() async {
   // Ensure Flutter binding is initialized
@@ -21,7 +23,10 @@ void main() async {
 
   runApp(
     MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => AuthCubit())],
+      providers: [
+        BlocProvider(create: (context) => AuthCubit()),
+        BlocProvider(create: (context) => TaskCubit()),
+      ],
       child: ChangeNotifierProvider(
         create: (context) => TaskProvider(),
         child: const MyApp(),

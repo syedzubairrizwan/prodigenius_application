@@ -9,6 +9,8 @@ class Task {
   DateTime? date;
   String? description;
   bool isCompleted;
+  String? priority; // High, Medium, Low
+  bool letAIDecide;
 
   // Properties derived from category, no longer stored directly
   // IconData? icon;
@@ -23,6 +25,8 @@ class Task {
     this.description,
     this.date,
     this.isCompleted = false,
+    this.priority,
+    this.letAIDecide = false,
   });
 
   // Getter for icon based on category

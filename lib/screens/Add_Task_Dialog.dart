@@ -23,8 +23,11 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
 
   late DateTime _selectedDate;
   String _selectedCategory = 'Personal';
+  String _selectedPriority = 'Medium';
+  bool _letAIDecide = false;
 
   final List<String> _categoryOptions = ['Personal', 'Work', 'Study'];
+  final List<String> _priorityOptions = ['High', 'Medium', 'Low'];
 
   @override
   void initState() {
@@ -46,9 +49,15 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
         selectedDate: _selectedDate,
         selectedCategory: _selectedCategory,
         categoryOptions: _categoryOptions,
+        selectedPriority: _selectedPriority,
+        priorityOptions: _priorityOptions,
         onDateChanged: (date) => setState(() => _selectedDate = date),
         onCategoryChanged:
             (category) => setState(() => _selectedCategory = category),
+        onPriorityChanged:
+            (priority) => setState(() => _selectedPriority = priority),
+        letAIDecide: _letAIDecide,
+        onAIDecideChanged: (value) => setState(() => _letAIDecide = value),
       ),
       actions: [
         TextButton(
@@ -67,6 +76,8 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                   category: TaskCategory.fromJson(
                     _selectedCategory.toLowerCase(),
                   ),
+                  priority: _letAIDecide ? null : _selectedPriority,
+                  letAIDecide: _letAIDecide,
                 ),
               );
               Navigator.pop(context);
@@ -94,8 +105,13 @@ class _TaskFormContent extends StatelessWidget {
     required this.selectedDate,
     required this.selectedCategory,
     required this.categoryOptions,
+    required this.selectedPriority,
+    required this.priorityOptions,
     required this.onDateChanged,
     required this.onCategoryChanged,
+    required this.onPriorityChanged,
+    required this.letAIDecide,
+    required this.onAIDecideChanged,
   });
 
   final GlobalKey<FormState> formKey;
@@ -104,8 +120,13 @@ class _TaskFormContent extends StatelessWidget {
   final DateTime selectedDate;
   final String selectedCategory;
   final List<String> categoryOptions;
+  final String selectedPriority;
+  final List<String> priorityOptions;
   final ValueChanged<DateTime> onDateChanged;
   final ValueChanged<String> onCategoryChanged;
+  final ValueChanged<String> onPriorityChanged;
+  final bool letAIDecide;
+  final ValueChanged<bool> onAIDecideChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -169,6 +190,16 @@ class _TaskFormContent extends StatelessWidget {
               categoryOptions: categoryOptions,
               onCategoryChanged: onCategoryChanged,
             ),
+            const SizedBox(height: 16),
+            Text('Priority:', style: textTheme.titleMedium),
+            const SizedBox(height: 8),
+            _PriorityPicker(
+              selectedPriority: selectedPriority,
+              priorityOptions: priorityOptions,
+              onPriorityChanged: onPriorityChanged,
+              letAIDecide: letAIDecide,
+              onAIDecideChanged: onAIDecideChanged,
+            ),
           ],
         ),
       ),
@@ -221,6 +252,75 @@ class _CategoryPicker extends StatelessWidget {
               ),
             );
           }).toList(),
+    );
+  }
+}
+
+class _PriorityPicker extends StatelessWidget {
+  const _PriorityPicker({
+    required this.selectedPriority,
+    required this.priorityOptions,
+    required this.onPriorityChanged,
+    required this.letAIDecide,
+    required this.onAIDecideChanged,
+  });
+
+  final String selectedPriority;
+  final List<String> priorityOptions;
+  final ValueChanged<String> onPriorityChanged;
+  final bool letAIDecide;
+  final ValueChanged<bool> onAIDecideChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: 8.0,
+          runSpacing: 4.0,
+          children:
+              priorityOptions.map((priority) {
+                final bool isSelected = selectedPriority == priority;
+                return ChoiceChip(
+                  label: Text(priority),
+                  selected: isSelected && !letAIDecide,
+                  onSelected: (selected) {
+                    if (selected) {
+                      onPriorityChanged(priority);
+                    }
+                  },
+                  selectedColor: colorScheme.primaryContainer,
+                  labelStyle: TextStyle(
+                    color:
+                        isSelected && !letAIDecide
+                            ? colorScheme.onPrimaryContainer
+                            : colorScheme.onSurface,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide(
+                      color:
+                          isSelected && !letAIDecide
+                              ? colorScheme.primary
+                              : colorScheme.outline,
+                    ),
+                  ),
+                );
+              }).toList(),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Switch(value: letAIDecide, onChanged: onAIDecideChanged),
+            const SizedBox(width: 8),
+            Text('Let AI decide priority', style: textTheme.bodyMedium),
+          ],
+        ),
+      ],
     );
   }
 }

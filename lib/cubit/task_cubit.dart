@@ -22,6 +22,8 @@ class TaskCubit extends Cubit<TaskState> {
                   description: task.description,
                   date: task.date,
                   isCompleted: !task.isCompleted,
+                  priority: task.priority,
+                  letAIDecide: task.letAIDecide,
                 );
               }
               return task;

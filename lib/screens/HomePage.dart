@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:prodigenius_application/providers/task_provider.dart';
+import 'package:prodigenius_application/providers/task_provider.dart';
 //import 'package:prodigenius_application/screens/Calendar_Screen.dart';
 import 'package:prodigenius_application/screens/MenuPage.dart';
 import 'package:prodigenius_application/screens/add_task_dialog.dart';
