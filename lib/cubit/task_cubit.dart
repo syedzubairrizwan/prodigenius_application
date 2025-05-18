@@ -24,6 +24,7 @@ class TaskCubit extends Cubit<TaskState> {
                   isCompleted: !task.isCompleted,
                   priority: task.priority,
                   letAIDecide: task.letAIDecide,
+                  getAlerts: task.getAlerts,
                 );
               }
               return task;

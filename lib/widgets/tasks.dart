@@ -4,6 +4,7 @@ import 'package:prodigenius_application/cubit/task_cubit.dart';
 import 'package:prodigenius_application/cubit/task_state.dart';
 import 'package:prodigenius_application/models/task_category.dart';
 import 'package:prodigenius_application/widgets/constant.dart';
+import 'package:prodigenius_application/screens/category_tasks_screen.dart';
 
 class Tasks extends StatelessWidget {
   final void Function(TaskCategory category)? onCategoryTap;
@@ -55,7 +56,14 @@ class Tasks extends StatelessWidget {
                 category: category,
                 left: left,
                 done: done,
-                onTap: () => onCategoryTap?.call(category),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CategoryTasksScreen(category: category),
+                    ),
+                  );
+                },
               );
             },
           ),

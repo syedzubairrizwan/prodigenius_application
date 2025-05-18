@@ -5,6 +5,7 @@ import 'package:prodigenius_application/screens/MenuPage.dart';
 import 'package:prodigenius_application/screens/add_task_dialog.dart';
 
 import 'package:prodigenius_application/widgets/constant.dart';
+import 'package:prodigenius_application/widgets/plans.dart';
 import 'package:prodigenius_application/widgets/premium.dart';
 import 'package:prodigenius_application/widgets/tasks.dart';
 import 'package:prodigenius_application/widgets/ai.dart';
@@ -19,7 +20,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   // Pages for the bottom navigation
-  final List<Widget> _pages = [const Homepage(), const AIPage()];
+  final List<Widget> _pages = [
+    const Homepage(),
+    const AIPage(),
+    const PlansPage(),
+    const Center(child: Text('Profile')), // Placeholder for Profile page
+  ];
   int _activeIndex = 0;
 
   @override
@@ -108,12 +114,12 @@ class _MyHomePageState extends State<MyHomePage> {
           selectedItemColor: Colors.blueAccent,
           unselectedItemColor: Colors.grey.shade400,
           currentIndex: _activeIndex,
+          type: BottomNavigationBarType.fixed,
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_rounded, size: 30),
               label: 'Home',
             ),
-
             BottomNavigationBarItem(
               icon: Icon(Icons.smart_toy, size: 30),
               label: 'AI',

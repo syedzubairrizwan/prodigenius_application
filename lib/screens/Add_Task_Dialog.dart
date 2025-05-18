@@ -25,6 +25,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
   String _selectedCategory = 'Personal';
   String _selectedPriority = 'Medium';
   bool _letAIDecide = false;
+  bool _getAlerts = false;
 
   final List<String> _categoryOptions = ['Personal', 'Work', 'Study'];
   final List<String> _priorityOptions = ['High', 'Medium', 'Low'];
@@ -58,6 +59,8 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
             (priority) => setState(() => _selectedPriority = priority),
         letAIDecide: _letAIDecide,
         onAIDecideChanged: (value) => setState(() => _letAIDecide = value),
+        getAlerts: _getAlerts,
+        onGetAlertsChanged: (value) => setState(() => _getAlerts = value),
       ),
       actions: [
         TextButton(
@@ -78,6 +81,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                   ),
                   priority: _letAIDecide ? null : _selectedPriority,
                   letAIDecide: _letAIDecide,
+                  getAlerts: _getAlerts,
                 ),
               );
               Navigator.pop(context);
@@ -112,6 +116,8 @@ class _TaskFormContent extends StatelessWidget {
     required this.onPriorityChanged,
     required this.letAIDecide,
     required this.onAIDecideChanged,
+    required this.getAlerts,
+    required this.onGetAlertsChanged,
   });
 
   final GlobalKey<FormState> formKey;
@@ -127,6 +133,8 @@ class _TaskFormContent extends StatelessWidget {
   final ValueChanged<String> onPriorityChanged;
   final bool letAIDecide;
   final ValueChanged<bool> onAIDecideChanged;
+  final bool getAlerts;
+  final ValueChanged<bool> onGetAlertsChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -199,6 +207,14 @@ class _TaskFormContent extends StatelessWidget {
               onPriorityChanged: onPriorityChanged,
               letAIDecide: letAIDecide,
               onAIDecideChanged: onAIDecideChanged,
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Switch(value: getAlerts, onChanged: onGetAlertsChanged),
+                const SizedBox(width: 8),
+                Text('Get Alerts', style: textTheme.bodyMedium),
+              ],
             ),
           ],
         ),

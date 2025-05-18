@@ -11,6 +11,7 @@ class Task {
   bool isCompleted;
   String? priority; // High, Medium, Low
   bool letAIDecide;
+  bool getAlerts;
 
   // Properties derived from category, no longer stored directly
   // IconData? icon;
@@ -27,6 +28,7 @@ class Task {
     this.isCompleted = false,
     this.priority,
     this.letAIDecide = false,
+    this.getAlerts = false,
   });
 
   // Getter for icon based on category
