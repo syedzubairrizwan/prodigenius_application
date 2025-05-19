@@ -323,31 +323,58 @@ class PlansPage extends StatelessWidget {
               color: Colors.grey[800],
             ),
           ),
-          const SizedBox(height: 20),
-          SizedBox(
-            height: 200,
-            child: PieChart(
-              PieChartData(
-                sections:
-                    categoryData.entries.map((entry) {
-                      final color = entry.key.backgroundColor;
-                      return PieChartSectionData(
-                        value: entry.value.toDouble(),
-                        title: '${entry.key.displayName}\n${entry.value}',
-                        color: color,
-                        radius: 100,
-                        titleStyle: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
-                    }).toList(),
-                sectionsSpace: 2,
-                centerSpaceRadius: 40,
+          const SizedBox(height: 16),
+          Center(
+            child: SizedBox(
+              height: 180,
+              width: 180,
+              child: PieChart(
+                PieChartData(
+                  sections:
+                      categoryData.entries.map((entry) {
+                        final color = entry.key.backgroundColor;
+                        return PieChartSectionData(
+                          value: entry.value.toDouble(),
+                          title: '${entry.key.displayName}\n${entry.value}',
+                          color: color,
+                          radius: 60,
+                          titleStyle: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      }).toList(),
+                  sectionsSpace: 2,
+                  centerSpaceRadius: 36,
+                  startDegreeOffset: -90,
+                ),
               ),
             ),
           ),
+          const SizedBox(height: 16),
+          ...categoryData.entries.map((entry) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Row(
+                children: [
+                  Container(
+                    width: 14,
+                    height: 14,
+                    decoration: BoxDecoration(
+                      color: entry.key.backgroundColor,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    '${entry.key.displayName}: ${entry.value}',
+                    style: TextStyle(color: Colors.grey[800], fontSize: 14),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
         ],
       ),
     );

@@ -24,7 +24,7 @@ class ContactUs extends StatelessWidget {
                 height: he * 0.27,
                 width: he * 0.35,
 
-                child: Image.asset('assets/OIP.jpg'),
+                child: Icon(Icons.help_center),
               ),
               Text(
                 'We are here to help you',

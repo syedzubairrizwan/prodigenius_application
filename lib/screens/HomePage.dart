@@ -6,7 +6,7 @@ import 'package:prodigenius_application/screens/add_task_dialog.dart';
 
 import 'package:prodigenius_application/widgets/constant.dart';
 import 'package:prodigenius_application/widgets/plans.dart';
-import 'package:prodigenius_application/widgets/premium.dart';
+import 'package:prodigenius_application/widgets/PrimeSpace.dart';
 import 'package:prodigenius_application/widgets/tasks.dart';
 import 'package:prodigenius_application/widgets/ai.dart';
 //import 'package:prodigenius_application/screens/Calendar_Screen.dart';
@@ -24,7 +24,6 @@ class _MyHomePageState extends State<MyHomePage> {
     const Homepage(),
     const AIPage(),
     const PlansPage(),
-    const Center(child: Text('Profile')), // Placeholder for Profile page
   ];
   int _activeIndex = 0;
 
@@ -54,7 +53,11 @@ class _MyHomePageState extends State<MyHomePage> {
         const SizedBox(width: 10),
         const Text(
           'Prodigenius',
-          style: TextStyle(color: Colors.grey, fontSize: 22),
+          style: TextStyle(
+            color: Color.fromARGB(255, 116, 116, 116),
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );
@@ -71,7 +74,18 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: Image.asset('assets/profile.png', fit: BoxFit.cover),
+        child: Image.asset(
+          'assets/profile.png',
+          fit: BoxFit.cover,
+          errorBuilder:
+              (context, error, stackTrace) => const Center(
+                child: Icon(
+                  Icons.lightbulb_rounded, // if the profile is not loaging
+                  color: Color.fromARGB(255, 247, 241, 75),
+                  size: 40,
+                ),
+              ),
+        ),
       ),
     );
   }
@@ -128,10 +142,6 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Icon(Icons.check_circle_outline, size: 30),
               label: 'Plans',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_rounded, size: 30),
-              label: 'Profile',
-            ),
           ],
           onTap: (index) {
             setState(() {
@@ -173,14 +183,15 @@ class Homepage extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
-          child: const GoPremium(), // Ensure GoPremium is a defined widget
+          child:
+              const MotivationalCarousel(), // Ensure GoPremium is a defined widget
         ),
         Padding(
           padding: const EdgeInsets.all(15),
           child: Text(
             'Tasks',
             style: TextStyle(
-              color: Colors.grey.shade600,
+              color: Color.fromARGB(255, 116, 116, 116),
               fontSize: 25,
               fontWeight: FontWeight.w500,
             ),
