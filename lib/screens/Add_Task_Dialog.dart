@@ -2,10 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:prodigenius_application/models/task_category.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prodigenius_application/models/Task_modal.dart';
 //import 'package:prodigenius_application/cubit/task_state.dart';
-import 'package:prodigenius_application/cubit/task_cubit.dart';
+import 'package:prodigenius_application/services/hive_service.dart';
 
 class AddTaskDialog extends StatefulWidget {
   final DateTime selectedDate;
@@ -70,20 +69,18 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
         TextButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {
-              context.read<TaskCubit>().addTask(
-                Task(
-                  id: DateTime.now().millisecondsSinceEpoch.toString(),
-                  taskName: _titleController.text,
-                  description: _descriptionController.text,
-                  date: _selectedDate,
-                  category: TaskCategory.fromJson(
-                    _selectedCategory.toLowerCase(),
-                  ),
-                  priority: _letAIDecide ? null : _selectedPriority,
-                  letAIDecide: _letAIDecide,
-                  getAlerts: _getAlerts,
-                ),
+              final newTask = Task(
+                id: DateTime.now().millisecondsSinceEpoch.toString(),
+                taskName: _titleController.text,
+                description: _descriptionController.text,
+                date: _selectedDate,
+                categoryName: _selectedCategory.toLowerCase(),
+                priority: _letAIDecide ? null : _selectedPriority,
+                letAIDecide: _letAIDecide,
+                getAlerts: _getAlerts,
+                isCompleted: false, // New tasks are not completed by default
               );
+              HiveService.addTask(newTask);
               Navigator.pop(context);
             }
           },

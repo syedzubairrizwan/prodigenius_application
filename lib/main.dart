@@ -10,6 +10,7 @@ import 'package:prodigenius_application/screens/SignupScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:prodigenius_application/cubit/auth_cubit.dart';
 import 'firebase_options.dart';
+import 'package:prodigenius_application/services/hive_service.dart';
 
 
 void main() async {
@@ -17,6 +18,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await HiveService.init(); // Initialize Hive
 
   // Set preferred orientations (optional)
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
