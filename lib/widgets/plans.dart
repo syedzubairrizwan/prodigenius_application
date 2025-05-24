@@ -1,44 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prodigenius_application/cubit/task_cubit.dart';
-import 'package:prodigenius_application/cubit/task_state.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:prodigenius_application/models/Task_modal.dart';
 import 'package:prodigenius_application/models/task_category.dart';
+import 'package:prodigenius_application/services/hive_service.dart';
 
-class PlansPage extends StatelessWidget {
+class PlansPage extends StatefulWidget {
   const PlansPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<TaskCubit, TaskState>(
-      builder: (context, state) {
-        final tasks = state.tasks;
-        final completedTasks = tasks.where((task) => task.isCompleted).length;
-        final totalTasks = tasks.length;
-        final completionRate =
-            totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0.0;
+  State<PlansPage> createState() => _PlansPageState();
+}
 
-        return SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildHeader(context),
-                const SizedBox(height: 24),
-                _buildCompletionRateCard(context, completionRate),
-                const SizedBox(height: 24),
-                _buildProductivityChart(context, tasks),
-                const SizedBox(height: 24),
-                _buildCategoryBreakdown(context, tasks),
-                const SizedBox(height: 24),
-                _buildMotivationalQuote(context, completionRate),
-              ],
-            ),
-          ),
-        );
-      },
+class _PlansPageState extends State<PlansPage> {
+  late ValueListenable<Box<Task>> _tasksListenable;
+  List<Task> _tasks = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _tasksListenable = HiveService.getTasksListenable();
+    _tasksListenable.addListener(_onTasksChanged);
+    _loadTasks();
+  }
+
+  @override
+  void dispose() {
+    _tasksListenable.removeListener(_onTasksChanged);
+    super.dispose();
+  }
+
+  void _onTasksChanged() {
+    setState(() {
+      _tasks = _tasksListenable.value.values.toList();
+    });
+  }
+
+  void _loadTasks() {
+    setState(() {
+      _tasks = HiveService.getTasks();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final completedTasks = _tasks.where((task) => task.isCompleted).length;
+    final totalTasks = _tasks.length;
+    final completionRate =
+        totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0.0;
+
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(context),
+            const SizedBox(height: 24),
+            _buildCompletionRateCard(context, completionRate),
+            const SizedBox(height: 24),
+            _buildProductivityChart(context, _tasks),
+            const SizedBox(height: 24),
+            _buildCategoryBreakdown(context, _tasks),
+            const SizedBox(height: 24),
+            _buildMotivationalQuote(context, completionRate),
+          ],
+        ),
+      ),
     );
   }
 
@@ -374,7 +403,7 @@ class PlansPage extends StatelessWidget {
                 ],
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

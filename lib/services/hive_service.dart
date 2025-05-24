@@ -21,6 +21,10 @@ class HiveService {
     return getTaskBox().listenable();
   }
 
+  static List<Task> getTasks() {
+    return getTaskBox().values.toList();
+  }
+
   static Future<void> addTask(Task task) async {
     final box = getTaskBox();
     // Ensure task.id is set, as it's used as the Hive key.

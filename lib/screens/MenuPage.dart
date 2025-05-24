@@ -4,6 +4,7 @@ import 'package:prodigenius_application/screens/ContactPage.dart';
 import 'package:prodigenius_application/screens/HomePage.dart';
 import 'package:prodigenius_application/screens/Settings.dart';
 import 'package:prodigenius_application/screens/HelpPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -13,6 +14,23 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
+  Future<void> _signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      if (mounted) {
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to sign out. Please try again.'),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var he = MediaQuery.of(context).size.height;
@@ -79,13 +97,7 @@ class _MenuPageState extends State<MenuPage> {
             ),
             SizedBox(height: he * 0.03),
             GestureDetector(
-              onTap: () {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  '/login',
-                  (route) => false,
-                );
-              },
+              onTap: _signOut,
               child: const Text('Logout', style: TextStyle(fontSize: 30)),
             ),
           ],
