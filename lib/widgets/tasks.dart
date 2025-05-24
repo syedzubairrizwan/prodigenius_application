@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prodigenius_application/cubit/task_cubit.dart';
-import 'package:prodigenius_application/cubit/task_state.dart';
 import 'package:prodigenius_application/models/task_category.dart';
 import 'package:prodigenius_application/widgets/constant.dart';
 import 'package:prodigenius_application/screens/category_tasks_screen.dart';
+import 'package:prodigenius_application/services/hive_service.dart';
+import 'package:prodigenius_application/models/Task_modal.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class Tasks extends StatelessWidget {
   final void Function(TaskCategory category)? onCategoryTap;
@@ -13,28 +13,14 @@ class Tasks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TaskCubit, TaskState>(
-      builder: (context, state) {
-        if (state.isLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    return ValueListenableBuilder<Box<Task>>(
+      valueListenable: HiveService.getTasksListenable(),
+      builder: (context, taskBox, _) {
+        final allTasks = taskBox.values.toList();
 
-        if (state.hasError) {
-          return Center(
-            child: SelectableText.rich(
-              TextSpan(
-                text: 'Error: ',
-                style: const TextStyle(color: Colors.red),
-                children: [
-                  TextSpan(
-                    text: state.errorMessage,
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
+        // The loading and error states previously handled by BlocState
+        // are not directly available here in the same way.
+        // UI should gracefully handle an empty list if tasks are loading or none exist.
 
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -48,7 +34,7 @@ class Tasks extends StatelessWidget {
             itemBuilder: (context, index) {
               final category = TaskCategory.values[index];
               final tasksForCategory =
-                  state.tasks.where((t) => t.category == category).toList();
+                  allTasks.where((t) => t.category == category).toList();
               final left = tasksForCategory.where((t) => !t.isCompleted).length;
               final done = tasksForCategory.where((t) => t.isCompleted).length;
 
@@ -60,6 +46,10 @@ class Tasks extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
+                      // CategoryTasksScreen will also need to be updated
+                      // to accept allTasks or use HiveService directly.
+                      // For now, this navigation part remains, but we'll address
+                      // CategoryTasksScreen in the next step.
                       builder: (_) => CategoryTasksScreen(category: category),
                     ),
                   );
