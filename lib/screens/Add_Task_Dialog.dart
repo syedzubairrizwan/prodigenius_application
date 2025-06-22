@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:prodigenius_application/models/Task_modal.dart';
 //import 'package:prodigenius_application/cubit/task_state.dart';
 import 'package:prodigenius_application/services/hive_service.dart';
+import 'package:prodigenius_application/services/notification_service.dart';
 
 class AddTaskDialog extends StatefulWidget {
   final DateTime selectedDate;
@@ -81,6 +82,16 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                 isCompleted: false, // New tasks are not completed by default
               );
               HiveService.addTask(newTask);
+              if (_getAlerts) {
+                NotificationService().scheduleNotification(
+                  id: newTask.id.hashCode,
+                  title: 'Task Reminder: ${newTask.taskName}',
+                  body: 'Your task is due tomorrow!',
+                  scheduledDate: _selectedDate.subtract(
+                    const Duration(days: 1),
+                  ),
+                );
+              }
               Navigator.pop(context);
             }
           },

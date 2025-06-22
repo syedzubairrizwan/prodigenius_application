@@ -8,8 +8,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 import 'package:prodigenius_application/services/hive_service.dart';
+import 'package:prodigenius_application/services/notification_service.dart';
 
-void main() async {
+Future<void> main() async {
   // Ensure Flutter binding is initialized
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -18,6 +19,9 @@ void main() async {
 
   // Initialize Hive
   await HiveService.init();
+
+  // Initialize Notification Service
+  await NotificationService().init();
 
   // Set preferred orientations
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

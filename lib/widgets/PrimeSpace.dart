@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class MotivationalCarousel extends StatefulWidget {
-  const MotivationalCarousel({Key? key}) : super(key: key);
+  const MotivationalCarousel({super.key});
 
   @override
   State<MotivationalCarousel> createState() => _MotivationalCarouselState();
@@ -18,7 +18,7 @@ class _MotivationalCarouselState extends State<MotivationalCarousel> {
     "Wake up with determination. Go to bed with satisfaction.",
     "Dream it. Wish it. Do it.",
     "Stay positive, work hard, make it happen.",
-    "The key to success is to focus on goals, not obstacles."
+    "The key to success is to focus on goals, not obstacles.",
   ];
 
   Timer? _autoScrollTimer;
@@ -27,7 +27,7 @@ class _MotivationalCarouselState extends State<MotivationalCarousel> {
   @override
   void initState() {
     super.initState();
-    _autoScrollTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+    _autoScrollTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       if (_controller.hasClients) {
         _currentIndex++;
         if (_currentIndex >= quotes.length) _currentIndex = 0;

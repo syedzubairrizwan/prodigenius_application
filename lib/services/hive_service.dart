@@ -50,4 +50,9 @@ class HiveService {
     final box = getTaskBox();
     await box.delete(id);
   }
+
+  static Future<void> clearAllTasks() async {
+    final box = getTaskBox();
+    await box.clear();
+  }
 }
